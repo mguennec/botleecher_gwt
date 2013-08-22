@@ -1,0 +1,94 @@
+/** Add css rules here for your application. */
+
+
+/** Example rules used by the template application (remove for your app) */
+h1 {
+  font-size: 2em;
+  font-weight: bold;
+  color: #777777;
+  margin: 40px 0px 70px;
+  text-align: center;
+}
+
+#gwt-HTML-Logs {
+    border: 1px solid black;
+    overflow: auto;
+}
+
+#menu {
+    margin-bottom: 10px;
+}
+#tabs {
+    margin-top: 10px;
+}
+
+
+span.errorMessage {
+    color: #8b0000;
+}
+
+span.infoMessage {
+    color: blue;
+}
+
+span.downloadMessage {
+    color: orange;
+}
+
+span.requestMessage {
+    color: #8a2be2;
+}
+
+.sendButton {
+  display: block;
+  font-size: 16pt;
+}
+
+/** Most GWT widgets already have a style name defined */
+.gwt-DialogBox {
+  width: 400px;
+}
+
+.dialogVPanel {
+  margin: 5px;
+}
+
+.serverResponseLabelError {
+  color: red;
+}
+
+/** Set ids using widget.getElement().setId("idOfElement") */
+#closeButton {
+  margin: 15px 6px 6px;
+}
+.progressbar-text {
+     font-weight: bold;
+}
+
+.progressbar-remaining {
+     font-size: 12px;
+     font-style: italic;
+}
+
+.progressbar-outer {
+     border: 1px solid black;
+}
+
+.progressbar-inner {
+     border: 1px solid black;
+     margin: 1px;
+}
+
+.progressbar-bar {
+     width: 5px;
+     height: 15px;
+     margin: 1px;
+ }
+
+.progressbar-fullbar {
+     background: blue;
+}
+
+.progressbar-blankbar {
+     background: #eee;
+}
