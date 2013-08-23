@@ -8,10 +8,7 @@ import botleecher.client.event.PackListEvent;
 import botleecher.client.listener.BotLeecherAdapter;
 import com.google.gwt.cell.client.ButtonCell;
 import com.google.gwt.cell.client.FieldUpdater;
-import com.google.gwt.event.dom.client.DoubleClickEvent;
-import com.google.gwt.event.dom.client.DoubleClickHandler;
-import com.google.gwt.event.dom.client.KeyUpEvent;
-import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.event.dom.client.*;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
@@ -191,6 +188,15 @@ public class BotTab extends Composite implements IFilter<PackListEvent.Pack> {
                 pack.setText("");
             }
         });
+        final KeyUpHandler keyHandler = new KeyUpHandler() {
+            @Override
+            public void onKeyUp(KeyUpEvent event) {
+                if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+                    packButton.fireEvent(new SelectEvent());
+                }
+            }
+        };
+        pack.addKeyUpHandler(keyHandler);
         buttons.add(refresh);
         buttons.add(cancel);
         buttons.add(pack);
