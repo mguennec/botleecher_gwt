@@ -5,9 +5,8 @@ import botleecher.client.LoginService;
 import botleecher.client.LoginServiceAsync;
 import botleecher.client.domain.SessionClient;
 import botleecher.server.security.SessionManager;
-import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyUpEvent;
-import com.google.gwt.event.dom.client.KeyUpHandler;
+import botleecher.shared.EnterChangeFocusKeyUpHandler;
+import botleecher.shared.EnterValidateKeyUpHandler;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
@@ -73,16 +72,8 @@ public class LoginBox extends DialogBox {
                 }
             }
         });
-        final KeyUpHandler keyHandler = new KeyUpHandler() {
-            @Override
-            public void onKeyUp(KeyUpEvent event) {
-                if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-                    loginButton.fireEvent(new SelectEvent());
-                }
-            }
-        };
-        loginBox.addKeyUpHandler(keyHandler);
-        passwordBox.addKeyUpHandler(keyHandler);
+        loginBox.addKeyUpHandler(new EnterChangeFocusKeyUpHandler(passwordBox));
+        passwordBox.addKeyUpHandler(new EnterValidateKeyUpHandler(loginButton));
         verticalPanel.add(loginButton);
     }
 }

@@ -1,18 +1,27 @@
 package botleecher.client.component;
 
 import botleecher.client.*;
+import botleecher.shared.EnterChangeFocusKeyUpHandler;
+import botleecher.shared.EnterValidateKeyUpHandler;
+import botleecher.shared.KeyProvider;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.TextBox;
+import com.sencha.gxt.core.client.ToStringValueProvider;
+import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.widget.core.client.Dialog;
+import com.sencha.gxt.widget.core.client.ListView;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.event.HideEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.menu.*;
+
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -31,8 +40,46 @@ public class BotMenu extends MenuBar {
 
     private LoginServiceAsync loginService = LoginService.App.getInstance();
 
+    private final ListStore<String> usersStore = new ListStore<String>(new KeyProvider());
+    private ListView<String, String> users;
+
     public BotMenu() {
         super();
+        users = new ListView<String, String>(usersStore, new ToStringValueProvider<String>()) {
+            @Override
+            public void onBrowserEvent(Event event) {
+                super.onBrowserEvent(event);
+                if (event.getTypeInt() == Event.ONDBLCLICK) {
+                    final Dialog dialog = new Dialog();
+                    final String user = users.getSelectionModel().getSelectedItem();
+                    dialog.setHideOnButtonClick(true);
+                    dialog.add(new Label("Do you want to delete " + user + " ?"));
+                    dialog.setPredefinedButtons(Dialog.PredefinedButton.YES, Dialog.PredefinedButton.NO);
+                    dialog.addHideHandler(new HideEvent.HideHandler() {
+                        @Override
+                        public void onHide(HideEvent event) {
+                            if (dialog.getHideButton() == dialog.getButtonById(Dialog.PredefinedButton.YES.name())) {
+                                loginService.deleteAccount(BotLeecherGwt.getSession(), user, new AsyncCallbackAdapter<Void>("DeleteAccount") {
+                                    /**
+                                     * Called when an asynchronous call completes successfully.
+                                     *
+                                     * @param result the return value of the remote produced call
+                                     */
+                                    @Override
+                                    public void onSuccess(Void result) {
+                                        loadUsers();
+                                        if (user.equalsIgnoreCase(BotLeecherGwt.getSession().getUser())) {
+                                            Window.Location.reload();
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    });
+                    dialog.show();
+                }
+            }
+        };
 
         final Dialog settingsBox = new Dialog();
         settingsBox.setClosable(true);
@@ -67,7 +114,25 @@ public class BotMenu extends MenuBar {
         final MenuItem addAccount = new MenuItem("Add account");
         admin.add(addAccount);
         addAccount.addSelectionHandler(getAddAccountHandler());
+        final MenuItem deleteAccount = new MenuItem("Delete account");
+        admin.add(deleteAccount);
+        deleteAccount.addSelectionHandler(getDeleteAccountHandler());
         addSettingsHandlers(settingsBox, valueHolder);
+    }
+
+    private void loadUsers() {
+        loginService.getAllAccounts(BotLeecherGwt.getSession(), new AsyncCallbackAdapter<List<String>>() {
+            /**
+             * Called when an asynchronous call completes successfully.
+             *
+             * @param result the return value of the remote produced call
+             */
+            @Override
+            public void onSuccess(List<String> result) {
+                usersStore.clear();
+                usersStore.addAll(result);
+            }
+        });
     }
 
     private SelectionHandler<Item> getPathHandler(final Dialog settingsBox, final Label label, final TextBox valueHolder) {
@@ -145,6 +210,8 @@ public class BotMenu extends MenuBar {
                 grid.setWidget(1, 0, passLabel);
                 grid.setWidget(0, 1, loginBox);
                 grid.setWidget(1, 1, passBox);
+                loginBox.addKeyUpHandler(new EnterChangeFocusKeyUpHandler(passBox));
+                passBox.addKeyUpHandler(new EnterValidateKeyUpHandler(addAccountDialog.getButtonById(Dialog.PredefinedButton.OK.name())));
                 addAccountDialog.add(grid);
                 addAccountDialog.addHideHandler(new HideEvent.HideHandler() {
                     @Override
@@ -155,6 +222,21 @@ public class BotMenu extends MenuBar {
                     }
                 });
                 addAccountDialog.show();
+                loginBox.setFocus(true);
+            }
+        };
+    }
+    private SelectionHandler<Item> getDeleteAccountHandler() {
+        return new SelectionHandler<Item>() {
+            @Override
+            public void onSelection(SelectionEvent<Item> event) {
+                loadUsers();
+                users.setHeight(80);
+                final Dialog deleteAccountDialog = new Dialog();
+                deleteAccountDialog.setHideOnButtonClick(true);
+                deleteAccountDialog.setPredefinedButtons(Dialog.PredefinedButton.CLOSE);
+                deleteAccountDialog.add(users);
+                deleteAccountDialog.show();
             }
         };
     }

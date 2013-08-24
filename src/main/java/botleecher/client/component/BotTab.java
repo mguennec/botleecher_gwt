@@ -6,10 +6,15 @@ import botleecher.client.MediatorService;
 import botleecher.client.MediatorServiceAsync;
 import botleecher.client.event.PackListEvent;
 import botleecher.client.listener.BotLeecherAdapter;
+import botleecher.shared.EnterValidateKeyUpHandler;
 import com.google.gwt.cell.client.ButtonCell;
 import com.google.gwt.cell.client.FieldUpdater;
-import com.google.gwt.event.dom.client.*;
+import com.google.gwt.event.dom.client.DoubleClickEvent;
+import com.google.gwt.event.dom.client.DoubleClickHandler;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.i18n.client.NumberFormat;
+import com.google.gwt.regexp.shared.RegExp;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.SimplePager;
@@ -29,10 +34,8 @@ import java.util.Comparator;
 
 public class BotTab extends Composite implements IFilter<PackListEvent.Pack> {
 
-    private MediatorServiceAsync mediatorService = MediatorService.App.getInstance();
-
     private final String botName;
-
+    private MediatorServiceAsync mediatorService = MediatorService.App.getInstance();
     private TextButton refresh = new TextButton("Refresh");
     private TextButton cancel = new TextButton("Cancel");
     private CellTable<PackListEvent.Pack> table = new CellTable<PackListEvent.Pack>();
@@ -54,12 +57,13 @@ public class BotTab extends Composite implements IFilter<PackListEvent.Pack> {
         }, DoubleClickEvent.getType());
 
         final ButtonCell buttonCell = new ButtonCell();
-        final Column<PackListEvent.Pack, String> buttonColumn = new Column<PackListEvent.Pack, String>(buttonCell) {
-            @Override
-            public String getValue(PackListEvent.Pack object) {
-                return "Go";
-            }
-        };
+        final Column<PackListEvent.Pack, String> buttonColumn = new
+                Column<PackListEvent.Pack, String>(buttonCell) {
+                    @Override
+                    public String getValue(PackListEvent.Pack object) {
+                        return "Go";
+                    }
+                };
         buttonColumn.setFieldUpdater(new FieldUpdater<PackListEvent.Pack, String>() {
             @Override
             public void update(int index, PackListEvent.Pack object, String value) {
@@ -67,59 +71,65 @@ public class BotTab extends Composite implements IFilter<PackListEvent.Pack> {
             }
         });
         table.addColumn(buttonColumn, "");
-        final TextColumn<PackListEvent.Pack> nbColumn = new TextColumn<PackListEvent.Pack>() {
-            @Override
-            public String getValue(PackListEvent.Pack pack) {
-                return String.valueOf(pack.getId());
-            }
-        };
+        final TextColumn<PackListEvent.Pack> nbColumn = new
+                TextColumn<PackListEvent.Pack>() {
+                    @Override
+                    public String getValue(PackListEvent.Pack pack) {
+                        return String.valueOf(pack.getId());
+                    }
+                };
         table.addColumn(nbColumn, "#");
-        final TextColumn<PackListEvent.Pack> statusColumn = new TextColumn<PackListEvent.Pack>() {
-            @Override
-            public String getValue(PackListEvent.Pack pack) {
-                return pack.getStatus().toString();
-            }
-        };
+        final TextColumn<PackListEvent.Pack> statusColumn = new
+                TextColumn<PackListEvent.Pack>() {
+                    @Override
+                    public String getValue(PackListEvent.Pack pack) {
+                        return pack.getStatus().toString();
+                    }
+                };
         table.addColumn(statusColumn, "Status");
-        final TextColumn<PackListEvent.Pack> nameColumn = new TextColumn<PackListEvent.Pack>() {
-            @Override
-            public String getValue(PackListEvent.Pack pack) {
-                return pack.getName();
-            }
-        };
+        final TextColumn<PackListEvent.Pack> nameColumn = new
+                TextColumn<PackListEvent.Pack>() {
+                    @Override
+                    public String getValue(PackListEvent.Pack pack) {
+                        return pack.getName();
+                    }
+                };
         table.addColumn(nameColumn, "Name");
-        final TextColumn<PackListEvent.Pack> sizeColumn = new TextColumn<PackListEvent.Pack>() {
-            @Override
-            public String getValue(PackListEvent.Pack pack) {
-                return sizeFormat.format(pack.getSize());
-            }
-        };
+        final TextColumn<PackListEvent.Pack> sizeColumn = new
+                TextColumn<PackListEvent.Pack>() {
+                    @Override
+                    public String getValue(PackListEvent.Pack pack) {
+                        return sizeFormat.format(pack.getSize());
+                    }
+                };
         table.addColumn(sizeColumn, "Size (K)");
-        final TextColumn<PackListEvent.Pack> dlColumn = new TextColumn<PackListEvent.Pack>() {
-            @Override
-            public String getValue(PackListEvent.Pack pack) {
-                return String.valueOf(pack.getDownloads());
-            }
-        };
+        final TextColumn<PackListEvent.Pack> dlColumn = new
+                TextColumn<PackListEvent.Pack>() {
+                    @Override
+                    public String getValue(PackListEvent.Pack pack) {
+                        return String.valueOf(pack.getDownloads());
+                    }
+                };
         table.addColumn(dlColumn, "Dls");
 
         table.setPageSize(100);
-        final Timer t = new Timer() {
-            public void run() {
-                mediatorService.getFileName(BotLeecherGwt.getSession(), botName, new AsyncCallbackAdapter<String>("Mediator.getFileName") {
-                    @Override
-                    public void onSuccess(String s) {
-                        progressBar.setTitle(s);
+        final Timer t = new
+                Timer() {
+                    public void run() {
+                        mediatorService.getFileName(BotLeecherGwt.getSession(), botName, new AsyncCallbackAdapter<String>("Mediator.getFileName") {
+                            @Override
+                            public void onSuccess(String s) {
+                                progressBar.setTitle(s);
+                            }
+                        });
+                        mediatorService.getProgress(BotLeecherGwt.getSession(), botName, new AsyncCallbackAdapter<Integer>("Mediator.getProgress") {
+                            @Override
+                            public void onSuccess(Integer integer) {
+                                progressBar.updateProgress((double) integer / 100.0, progressBar.getTitle() + " ({0} %)");
+                            }
+                        });
                     }
-                });
-                mediatorService.getProgress(BotLeecherGwt.getSession(), botName, new AsyncCallbackAdapter<Integer>("Mediator.getProgress") {
-                    @Override
-                    public void onSuccess(Integer integer) {
-                        progressBar.updateProgress((double)integer / 100.0, progressBar.getTitle() + " ({0} %)");
-                    }
-                });
-            }
-        };
+                };
 
         t.scheduleRepeating(20000);
 
@@ -188,15 +198,7 @@ public class BotTab extends Composite implements IFilter<PackListEvent.Pack> {
                 pack.setText("");
             }
         });
-        final KeyUpHandler keyHandler = new KeyUpHandler() {
-            @Override
-            public void onKeyUp(KeyUpEvent event) {
-                if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-                    packButton.fireEvent(new SelectEvent());
-                }
-            }
-        };
-        pack.addKeyUpHandler(keyHandler);
+        pack.addKeyUpHandler(new EnterValidateKeyUpHandler(packButton));
         buttons.add(refresh);
         buttons.add(cancel);
         buttons.add(pack);
@@ -204,7 +206,10 @@ public class BotTab extends Composite implements IFilter<PackListEvent.Pack> {
         buttons.setSpacing(2);
         panel.add(buttons);
         panel.add(progressBar);
-        panel.add(filter);
+        final Grid grid = new Grid(1, 2);
+        grid.setWidget(0, 0, new Label("Filter :"));
+        grid.setWidget(0, 1, filter);
+        panel.add(grid);
         panel.add(pager2);
         panel.add(table);
         panel.add(pager1);
@@ -214,7 +219,7 @@ public class BotTab extends Composite implements IFilter<PackListEvent.Pack> {
 
     @Override
     public boolean isValid(PackListEvent.Pack value, String filter) {
-        return value.getName().toLowerCase().contains(filter.toLowerCase());
+        return RegExp.compile(filter.replaceAll("[^.]?\\*", ".*"), "i").test(value.getName());
     }
 
     public void onCloseTab() {

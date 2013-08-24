@@ -6,11 +6,11 @@ import botleecher.client.MediatorService;
 import botleecher.client.MediatorServiceAsync;
 import botleecher.client.event.UserListEvent;
 import botleecher.client.listener.BotLeecherAdapter;
+import botleecher.shared.KeyProvider;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.*;
 import com.sencha.gxt.core.client.ToStringValueProvider;
 import com.sencha.gxt.data.shared.ListStore;
-import com.sencha.gxt.data.shared.ModelKeyProvider;
 import com.sencha.gxt.data.shared.StringLabelProvider;
 import com.sencha.gxt.widget.core.client.ListView;
 import com.sencha.gxt.widget.core.client.button.TextButton;
@@ -65,6 +65,7 @@ public class BotPanel extends Composite {
         grid.setWidget(1, 1, channel);
         grid.setWidget(2, 1, connect);
         panel.add(grid);
+        channel.focus();
 
         panel.add(persons);
         persons.hide();
@@ -75,7 +76,6 @@ public class BotPanel extends Composite {
         comp.setNorthWidget(getMenu());
         comp.setSouthWidget(completePanel);
         initWidget(comp);
-
     }
 
     private Widget getMenu() {
@@ -135,18 +135,6 @@ public class BotPanel extends Composite {
         personsStore.clear();
         personsStore.addAll(result);
         persons.show();
-    }
-
-    private class KeyProvider implements ModelKeyProvider<String> {
-
-        /**
-         * Gets a key value that maps to this object. Keys must be consistent and
-         * unique for a given model, as a database primary key would be used.
-         */
-        @Override
-        public String getKey(String item) {
-            return item;
-        }
     }
 
 }

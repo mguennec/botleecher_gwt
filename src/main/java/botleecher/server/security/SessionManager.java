@@ -20,6 +20,8 @@ public interface SessionManager {
 
     void deleteSession(String sessionId) throws JDOMException, IOException;
 
+    void deleteSessionsByUser(String login) throws JDOMException, IOException;
+
     public class Session {
         private String user;
         private String uuid;

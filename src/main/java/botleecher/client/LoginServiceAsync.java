@@ -1,6 +1,9 @@
 package botleecher.client;
 
+import botleecher.client.domain.SessionClient;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,4 +22,7 @@ public interface LoginServiceAsync {
 
     void addAccount(final String login, final String password, AsyncCallback<Void> async);
 
+    void deleteAccount(final SessionClient session, final String login, AsyncCallback<Void> async);
+
+    void getAllAccounts(final SessionClient session, AsyncCallback<List<String>> async);
 }

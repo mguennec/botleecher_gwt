@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 public class XmlSessionManager implements SessionManager {
@@ -38,6 +39,27 @@ public class XmlSessionManager implements SessionManager {
                 if (object instanceof Element) {
                     ((Element) object).detach();
                     new XMLOutputter().output(document, new FileOutputStream(file));
+                }
+            }
+        }
+    }
+
+    @Override
+    public void deleteSessionsByUser(String login) throws JDOMException, IOException {
+        synchronized (this) {
+            final File file = new File(SESSION_FILE);
+            if (file.exists()) {
+                final Document document = new SAXBuilder().build(file);
+                final List<Object> objects = XPathFactory.instance().compile("/sessions/session[@user='" + login + "']").evaluate(document);
+                if (objects != null) {
+                    for (Object object : objects) {
+                        if (object instanceof Element) {
+                            ((Element) object).detach();
+                        }
+                    }
+                    if (objects.size() > 0) {
+                        new XMLOutputter().output(document, new FileOutputStream(file));
+                    }
                 }
             }
         }

@@ -1,12 +1,15 @@
 package botleecher.server;
 
 import botleecher.client.LoginService;
+import botleecher.client.domain.SessionClient;
 import botleecher.server.security.LoginManager;
 import botleecher.server.security.SessionManager;
 import com.google.inject.Inject;
 import org.jdom2.JDOMException;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 
 
 public class LoginServiceImpl extends InjectedRemoteServiceServlet implements LoginService {
@@ -35,5 +38,24 @@ public class LoginServiceImpl extends InjectedRemoteServiceServlet implements Lo
     @Override
     public void addAccount(String login, String password) throws Exception {
         loginManager.addLogin(login, password);
+    }
+
+    @Override
+    public void deleteAccount(SessionClient session, String login) throws Exception {
+        if (session == null || !isSessionValid(session.getUser(), session.getUuid())) {
+            throw new IllegalAccessError("You can't delete an account without a valid session");
+        }
+        loginManager.deleteLogin(login);
+        sessionManager.deleteSessionsByUser(login);
+    }
+
+    @Override
+    public List<String> getAllAccounts(SessionClient session) throws Exception {
+        if (session == null || !isSessionValid(session.getUser(), session.getUuid())) {
+            throw new IllegalAccessError("You can't delete an account without a valid session");
+        }
+        final List<String> allUsers = loginManager.getAllUsers();
+        Collections.sort(allUsers);
+        return allUsers;
     }
 }
