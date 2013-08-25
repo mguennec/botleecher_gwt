@@ -16,6 +16,7 @@ import com.google.inject.Singleton;
 import fr.botleecher.rev.BotLeecher;
 import fr.botleecher.rev.IrcConnection;
 import fr.botleecher.rev.model.Pack;
+import fr.botleecher.rev.model.PackList;
 import fr.botleecher.rev.service.Settings;
 import fr.botleecher.rev.tools.DualOutputStream;
 import org.pircbotx.User;
@@ -201,6 +202,19 @@ public class BotMediatorImpl extends ListenerAdapter implements fr.botleecher.re
                 packListLoaded(user, botLeecher.getPackList().getPacks());
             }
         }
+    }
+
+    @Override
+    public List<Pack> getCurrentPackList(String user) {
+        final List<Pack> packs = new ArrayList<Pack>();
+        final BotLeecher botLeecher = ircConnection.getBotLeecher(user);
+        if (botLeecher != null) {
+            final PackList packList = botLeecher.getPackList();
+            if (packList != null) {
+                packs.addAll(packList.getPacks());
+            }
+        }
+        return packs;
     }
 
     @Override
