@@ -30,6 +30,7 @@ import de.novanic.eventservice.client.event.domain.DomainFactory;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 
 public class BotTab extends Composite implements IFilter<PackListEvent.Pack> {
@@ -39,14 +40,15 @@ public class BotTab extends Composite implements IFilter<PackListEvent.Pack> {
     private TextButton refresh = new TextButton("Refresh");
     private TextButton cancel = new TextButton("Cancel");
     private CellTable<PackListEvent.Pack> table = new CellTable<PackListEvent.Pack>();
+    private final FilteredListDataProvider<PackListEvent.Pack> data;
     private com.sencha.gxt.widget.core.client.ProgressBar progressBar = new com.sencha.gxt.widget.core.client.ProgressBar();
     private TextBox filter = new TextBox();
     private NumberFormat sizeFormat = NumberFormat.getDecimalFormat();
 
-    public BotTab(final String botName) {
+    public BotTab(final String botName, final List<PackListEvent.Pack> packs) {
         this.botName = botName;
         progressBar.setWidth(500);
-        final FilteredListDataProvider<PackListEvent.Pack> data = new FilteredListDataProvider<PackListEvent.Pack>(this);
+        data = new FilteredListDataProvider<PackListEvent.Pack>(this);
         final SingleSelectionModel<PackListEvent.Pack> selectionModel = new SingleSelectionModel<PackListEvent.Pack>();
         data.addDataDisplay(table);
         this.table.setSelectionModel(selectionModel);
@@ -138,12 +140,7 @@ public class BotTab extends Composite implements IFilter<PackListEvent.Pack> {
         service.addListener(DomainFactory.getDomain("bot"), new BotLeecherAdapter() {
             public void onPackListEvent(PackListEvent event) {
                 if (event.getNick().equalsIgnoreCase(botName)) {
-                    Collections.sort(event.getPacks(), new Comparator<PackListEvent.Pack>() {
-                        public int compare(PackListEvent.Pack o1, PackListEvent.Pack o2) {
-                            return o2.getId() - o1.getId();
-                        }
-                    });
-                    data.setList(event.getPacks());
+                    setPackList(event.getPacks());
                 }
             }
         });
@@ -154,6 +151,24 @@ public class BotTab extends Composite implements IFilter<PackListEvent.Pack> {
             }
         });
         init();
+        if (packs == null) {
+            mediatorService.getList(BotLeecherGwt.getSession(), botName, false, new AsyncCallbackAdapter<Void>("Mediator.getList"));
+        } else {
+            setPackList(packs);
+        }
+    }
+
+    private void setPackList(List<PackListEvent.Pack> packs) {
+            Collections.sort(packs, new Comparator<PackListEvent.Pack>() {
+                public int compare(PackListEvent.Pack o1, PackListEvent.Pack o2) {
+                    return o2.getId() - o1.getId();
+                }
+            });
+            data.setList(packs);
+    }
+
+    public BotTab(final String botName) {
+        this(botName, null);
     }
 
     private void init() {
@@ -214,7 +229,6 @@ public class BotTab extends Composite implements IFilter<PackListEvent.Pack> {
         panel.add(table);
         panel.add(pager1);
         initWidget(new ScrollPanel(panel));
-        mediatorService.getList(BotLeecherGwt.getSession(), botName, false, new AsyncCallbackAdapter<Void>("Mediator.getList"));
     }
 
     @Override

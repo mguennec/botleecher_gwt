@@ -5,6 +5,7 @@ import botleecher.client.BotLeecherGwt;
 import botleecher.client.MediatorService;
 import botleecher.client.MediatorServiceAsync;
 import botleecher.client.event.MessageEvent;
+import botleecher.client.event.PackListEvent;
 import botleecher.client.listener.BotLeecherAdapter;
 import com.chj.gwt.client.soundmanager2.Callback;
 import com.chj.gwt.client.soundmanager2.SoundManager;
@@ -21,7 +22,9 @@ import de.novanic.eventservice.client.event.RemoteEventServiceFactory;
 import de.novanic.eventservice.client.event.domain.DomainFactory;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -35,6 +38,7 @@ public class BotTabPanel extends TabPanel {
     private HTML logsHtml = new HTML();
     private MediatorServiceAsync mediatorService = MediatorService.App.getInstance();
     private SoundManager soundManager = SoundManager.getInstance();
+    private Map<String, BotTab> bots = new HashMap<String, BotTab>();
 
     public BotTabPanel() {
         super();
@@ -67,7 +71,6 @@ public class BotTabPanel extends TabPanel {
         initData();
     }
 
-
     private void writeLog(final String log) {
         logsHtml.setHTML(DateTimeFormat.getFormat("[dd/MM/yyyy HH:mm:ss] ").format(new Date()) + log + "<br />" + logsHtml.getHTML());
     }
@@ -87,7 +90,8 @@ public class BotTabPanel extends TabPanel {
             public void onMessageEvent(MessageEvent event) {
                 writeLog(event.getMessage());
                 if (MessageEvent.MessageType.ADDED.equals(event.getType())) {
-                    soundManager.
+                    soundManager.beginDelayedInit();
+
                     soundManager.onReady(new Callback() {
                         @Override
                         public void execute() {
@@ -99,8 +103,16 @@ public class BotTabPanel extends TabPanel {
         });
     }
 
+    public void addBot(String name, List<PackListEvent.Pack> packs) {
+        if (!bots.containsKey(name)) {
+            final BotTab tab = new BotTab(name, packs);
+            bots.put(name, tab);
+            add(tab, new TabItemConfig(name, true));
+        }
+    }
+
     public void addBot(String name) {
-        add(new BotTab(name), new TabItemConfig(name, true));
+        addBot(name, null);
     }
 
     public void initData() {

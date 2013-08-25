@@ -4,6 +4,7 @@ import botleecher.client.AsyncCallbackAdapter;
 import botleecher.client.BotLeecherGwt;
 import botleecher.client.MediatorService;
 import botleecher.client.MediatorServiceAsync;
+import botleecher.client.event.PackListEvent;
 import botleecher.client.event.UserListEvent;
 import botleecher.client.listener.BotLeecherAdapter;
 import botleecher.shared.KeyProvider;
@@ -31,7 +32,6 @@ public class BotPanel extends Composite {
     private TextButton connect = new TextButton("Connect");
     private ListStore<String> personsStore = new ListStore<String>(new KeyProvider());
     private ListView<String, String> persons;
-    //private ListBox persons = new ListBox(true);
     private BotTabPanel tabs = new BotTabPanel();
 
     private MediatorServiceAsync mediatorService = MediatorService.App.getInstance();
@@ -42,7 +42,7 @@ public class BotPanel extends Composite {
             public void onBrowserEvent(Event event) {
                 super.onBrowserEvent(event);
                 if (event.getTypeInt() == Event.ONDBLCLICK) {
-                    tabs.addBot(persons.getSelectionModel().getSelectedItem());
+                    mediatorService.getList(BotLeecherGwt.getSession(), persons.getSelectionModel().getSelectedItem(), new AsyncCallbackAdapter<Void>("mediatorService.getList"));
                 }
             }
         };
@@ -88,6 +88,9 @@ public class BotPanel extends Composite {
         service.addListener(DomainFactory.getDomain("bot"), new BotLeecherAdapter() {
             public void onUserListEvent(UserListEvent event) {
                 setUserList(event.getUsers());
+            }
+            public void onPackListEvent(PackListEvent event) {
+                tabs.addBot(event.getNick(), event.getPacks());
             }
         });
     }
