@@ -1,10 +1,4 @@
-package botleecher.server.rest; /**
- * Created with IntelliJ IDEA.
- * User: Maxime Guennec
- * Date: 27/08/13
- * Time: 00:31
- * To change this template use File | Settings | File Templates.
- */
+package botleecher.server.rest;
 
 import botleecher.server.module.BotLeecherModule;
 import botleecher.server.module.BotLeecherServletModule;
@@ -20,29 +14,17 @@ import java.util.Map;
 public class GuiceServletConfig extends GuiceServletContextListener {
     @Override
     protected Injector getInjector() {
-        createInjector();
-        return injector;
-    }
-    private static Injector injector;
+        return Guice.createInjector(new BotLeecherModule(), new BotLeecherServletModule(), new JerseyServletModule() {
 
-    private static void createInjector() {
-        if (injector == null) {
-            synchronized (BotLeecherModule.class) {
-                if (injector == null) {
-                    injector = Guice.createInjector(new BotLeecherModule(), new BotLeecherServletModule(), new JerseyServletModule() {
+            @Override
+            protected void configureServlets() {
+                final Map<String, String> params = new HashMap<String, String>();
+                params.put("com.sun.jersey.config.property.packages", "botleecher.server.rest.resources");
+                params.put("com.sun.jersey.api.json.POJOMappingFeature", "true");
 
-                        @Override
-                        protected void configureServlets() {
-                            final Map<String, String> params = new HashMap<String, String>();
-                            params.put("com.sun.jersey.config.property.packages", "botleecher.server.rest.resources");
-                            params.put("com.sun.jersey.api.json.POJOMappingFeature", "true");
+                serve("/rest/*").with(GuiceContainer.class, params);
 
-                            serve("/rest/*").with(GuiceContainer.class, params);
-
-                        }
-                    });
-                }
             }
-        }
+        });
     }
 }
