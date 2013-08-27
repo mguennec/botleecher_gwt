@@ -4,57 +4,34 @@
         "http://java.sun.com/dtd/web-app_2_3.dtd">
 
 <web-app>
+    <filter>
+        <filter-name>guiceFilter</filter-name>
+        <filter-class>com.google.inject.servlet.GuiceFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>guiceFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <listener>
+        <listener-class>botleecher.server.rest.GuiceServletConfig</listener-class>
+    </listener>
 
     <!-- Servlets -->
-    <servlet>
-        <servlet-name>mediatorServlet</servlet-name>
-        <servlet-class>botleecher.server.MediatorServiceImpl</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>eventServiceImpl</servlet-name>
-        <servlet-class>de.novanic.eventservice.service.EventServiceImpl</servlet-class>
-    </servlet>
     <servlet>
         <servlet-name>botleecher.BotLeecherGwt EventMediatorService</servlet-name>
         <servlet-class>botleecher.server.EventMediatorServiceImpl</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>botleecher.BotLeecherGwt LoginService</servlet-name>
-        <servlet-class>botleecher.server.LoginServiceImpl</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>jersey-rest</servlet-name>
-        <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
-        <init-param>
-            <param-name>com.sun.jersey.config.property.packages</param-name>
-            <param-value>botleecher.server.rest.resources</param-value>
-            <!--<param-value>botleecher.server.rest.resources,org.codehaus.jackson.jaxrs</param-value>-->
-        </init-param>
-        <init-param>
-            <param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
-            <param-value>true</param-value>
-        </init-param>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>jersey-rest</servlet-name>
-        <url-pattern>/rest/*</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>mediatorServlet</servlet-name>
-        <url-pattern>/botleecher/MediatorService</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
         <servlet-name>eventServiceImpl</servlet-name>
-        <url-pattern>/botleecher/gwteventservice</url-pattern>
-    </servlet-mapping>
+        <servlet-class>de.novanic.eventservice.service.EventServiceImpl</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>botleecher.BotLeecherGwt EventMediatorService</servlet-name>
         <url-pattern>/botleecher/EventMediatorService</url-pattern>
-    </servlet-mapping>
+    </servlet-mapping>>
     <servlet-mapping>
-        <servlet-name>botleecher.BotLeecherGwt LoginService</servlet-name>
-        <url-pattern>/botleecher/LoginService</url-pattern>
+        <servlet-name>eventServiceImpl</servlet-name>
+        <url-pattern>/botleecher/gwteventservice</url-pattern>
     </servlet-mapping>
 
     <!-- Default page to serve -->

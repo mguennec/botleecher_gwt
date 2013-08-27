@@ -1,8 +1,8 @@
 package botleecher.server.rest.resources;
 
-import botleecher.server.module.BotLeecherModule;
 import botleecher.server.security.LoginManager;
 import botleecher.server.security.SessionManager;
+import com.google.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,8 +15,10 @@ import javax.ws.rs.core.MediaType;
 @Path("/login")
 public class LoginResource {
 
-    private LoginManager loginManager = BotLeecherModule.getInstance(LoginManager.class);
-    private SessionManager sessionManager = BotLeecherModule.getInstance(SessionManager.class);
+    @Inject
+    private LoginManager loginManager;
+    @Inject
+    private SessionManager sessionManager;
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)

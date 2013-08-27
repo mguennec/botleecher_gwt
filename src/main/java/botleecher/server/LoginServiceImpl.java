@@ -4,15 +4,17 @@ import botleecher.client.LoginService;
 import botleecher.client.domain.SessionClient;
 import botleecher.server.security.LoginManager;
 import botleecher.server.security.SessionManager;
+import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import org.jdom2.JDOMException;
 
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
-
-public class LoginServiceImpl extends InjectedRemoteServiceServlet implements LoginService {
+@Singleton
+public class LoginServiceImpl extends RemoteServiceServlet implements LoginService {
 
     @Inject
     private LoginManager loginManager;

@@ -4,7 +4,9 @@ import botleecher.client.MediatorService;
 import botleecher.client.domain.SessionClient;
 import botleecher.shared.LoginException;
 import botleecher.server.security.SessionManager;
+import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import fr.botleecher.rev.BotLeecher;
 import fr.botleecher.rev.service.BotMediator;
 import org.pircbotx.User;
@@ -13,7 +15,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class MediatorServiceImpl extends InjectedRemoteServiceServlet implements MediatorService {
+@Singleton
+public class MediatorServiceImpl extends RemoteServiceServlet implements MediatorService {
 
     @Inject
     private SessionManager sessionManager;

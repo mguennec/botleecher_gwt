@@ -14,8 +14,6 @@ import botleecher.server.security.annotations.DefaultLogin;
 import botleecher.server.security.impl.XmlLoginManager;
 import botleecher.server.security.impl.XmlSessionManager;
 import com.google.inject.AbstractModule;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
 import com.google.inject.matcher.Matchers;
 import fr.botleecher.rev.IrcConnection;
 import fr.botleecher.rev.service.*;
@@ -46,22 +44,5 @@ public class BotLeecherModule extends AbstractModule {
     }
 
 
-    private static Injector injector;
-
-    public static Injector getInjector() {
-        if (injector == null) {
-            synchronized (BotLeecherModule.class) {
-                if (injector == null) {
-                    injector = Guice.createInjector(new BotLeecherModule());
-                }
-            }
-        }
-        return injector;
-    }
-
-    public static <T> T getInstance(Class<T> klass) {
-        final Injector injector = getInjector();
-        return injector.getInstance(klass);
-    }
 
 }

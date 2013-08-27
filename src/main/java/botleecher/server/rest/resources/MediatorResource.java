@@ -1,7 +1,7 @@
 package botleecher.server.rest.resources;
 
-import botleecher.server.module.BotLeecherModule;
 import botleecher.server.security.SessionManager;
+import com.google.inject.Inject;
 import fr.botleecher.rev.BotLeecher;
 import fr.botleecher.rev.model.Pack;
 import fr.botleecher.rev.service.BotMediator;
@@ -20,8 +20,10 @@ import java.util.List;
 @Path("/bots")
 public class MediatorResource {
 
-    private BotMediator botMediator = BotLeecherModule.getInstance(BotMediator.class);
-    private SessionManager sessionManager = BotLeecherModule.getInstance(SessionManager.class);
+    @Inject
+    private BotMediator botMediator;
+    @Inject
+    private SessionManager sessionManager;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
