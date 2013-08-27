@@ -239,4 +239,8 @@ public class BotTab extends Composite implements IFilter<PackListEvent.Pack> {
     public void onCloseTab() {
         mediatorService.removeLeecher(BotLeecherGwt.getSession(), botName, new AsyncCallbackAdapter<Void>());
     }
+
+    public String getBotName() {
+        return botName;
+    }
 }

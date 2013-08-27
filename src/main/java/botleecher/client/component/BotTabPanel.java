@@ -57,6 +57,7 @@ public class BotTabPanel extends TabPanel {
             public void onBeforeClose(BeforeCloseEvent<Widget> widgetBeforeCloseEvent) {
                 final Widget item = widgetBeforeCloseEvent.getItem();
                 if (item instanceof BotTab) {
+                    bots.remove(((BotTab) item).getBotName());
                     ((BotTab) item).onCloseTab();
                 } else {
                     widgetBeforeCloseEvent.setCancelled(true);
