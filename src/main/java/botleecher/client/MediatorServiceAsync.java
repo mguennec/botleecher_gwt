@@ -1,6 +1,7 @@
 package botleecher.client;
 
 import botleecher.client.domain.SessionClient;
+import botleecher.client.event.PackListEvent;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import java.util.Date;
@@ -52,4 +53,6 @@ public interface MediatorServiceAsync {
     void getKeywords(final SessionClient session, AsyncCallback<String> async);
 
     void removeLeecher(final SessionClient session, final String user, AsyncCallback<Void> async);
+
+    void getCurrentList(final SessionClient session, String user, AsyncCallback<List<PackListEvent.Pack>> async);
 }

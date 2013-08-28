@@ -9,7 +9,7 @@
 package botleecher.server;
 
 import botleecher.client.EventMediatorService;
-import botleecher.client.event.PackListEvent;
+import botleecher.server.utils.PackUtils;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Singleton;
@@ -115,9 +115,6 @@ public class BotMediatorImpl extends ListenerAdapter implements fr.botleecher.re
     }
 
     public BotMediatorImpl() {
-    }
-    
-    public void start(){
         redirectOutputStreams();
     }
 
@@ -344,7 +341,7 @@ public class BotMediatorImpl extends ListenerAdapter implements fr.botleecher.re
      * Todo refactor, this should stay private
      * @return 
      */
-    protected IrcConnection getIrcConnection() {
+    private IrcConnection getIrcConnection() {
         return ircConnection;
     }
 
@@ -373,12 +370,9 @@ public class BotMediatorImpl extends ListenerAdapter implements fr.botleecher.re
      */
     @Override
     public void packListLoaded(final String botName, List<Pack> packList) {
-        final List<PackListEvent.Pack> packs = new ArrayList<PackListEvent.Pack>();
-        for (Pack pack : packList) {
-            packs.add(new PackListEvent.Pack(pack.getId(), pack.getDownloads(), pack.getSize(), pack.getName(),pack.getStatus().toString()));
-        }
-        service.sendPack(botName, packs);
+        service.sendPack(botName, PackUtils.getClientPacks(packList));
     }
+
 
     private static class UserComparator implements Comparator<User>, Serializable {
 

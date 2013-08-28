@@ -1,6 +1,7 @@
 package botleecher.client;
 
 import botleecher.client.domain.SessionClient;
+import botleecher.client.event.PackListEvent;
 import botleecher.shared.LoginException;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.RemoteService;
@@ -26,6 +27,8 @@ public interface MediatorService extends RemoteService {
     void getList(final SessionClient session, final String user) throws LoginException;
 
     void getList(final SessionClient session, final String user, final boolean refresh) throws LoginException;
+
+    List<PackListEvent.Pack> getCurrentList(final SessionClient session, String user) throws LoginException;
 
     void getPack(final SessionClient session, final String user, final int pack) throws LoginException;
 

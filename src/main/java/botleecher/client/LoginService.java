@@ -18,6 +18,7 @@ import java.util.List;
 public interface LoginService extends RemoteService {
 
     String login(final String login, final String password) throws Exception;
+    String login(final String login, final String password, final String ip) throws Exception;
 
     void logout(final String sessionId) throws Exception;
 

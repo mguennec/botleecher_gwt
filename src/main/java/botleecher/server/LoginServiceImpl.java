@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
+@SuppressWarnings("GwtServiceNotRegistered")
 @Singleton
 public class LoginServiceImpl extends RemoteServiceServlet implements LoginService {
 
@@ -24,7 +25,12 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 
     @Override
     public String login(final String login, final String password) throws Exception {
-        return loginManager.isLoginValid(login, password) ? sessionManager.createSession(login, getThreadLocalRequest().getRemoteAddr()) : null;
+        return login(login, password, getThreadLocalRequest() == null ? null : getThreadLocalRequest().getRemoteAddr());
+    }
+
+    @Override
+    public String login(String login, String password, String ip) throws Exception {
+        return loginManager.isLoginValid(login, password) ? sessionManager.createSession(login, ip) : null;
     }
 
     @Override

@@ -2,8 +2,10 @@ package botleecher.server;
 
 import botleecher.client.MediatorService;
 import botleecher.client.domain.SessionClient;
-import botleecher.shared.LoginException;
+import botleecher.client.event.PackListEvent;
 import botleecher.server.security.SessionManager;
+import botleecher.server.utils.PackUtils;
+import botleecher.shared.LoginException;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -15,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@SuppressWarnings("GwtServiceNotRegistered")
 @Singleton
 public class MediatorServiceImpl extends RemoteServiceServlet implements MediatorService {
 
@@ -26,7 +29,7 @@ public class MediatorServiceImpl extends RemoteServiceServlet implements Mediato
     private boolean isSessionValid(final SessionClient session) {
         boolean retVal;
         try {
-            retVal = sessionManager.checkSession(session.getUser(), session.getUuid(), getThreadLocalRequest().getRemoteAddr());
+            retVal = sessionManager.checkSession(session.getUser(), session.getUuid(), getThreadLocalRequest() == null ? session.getIp() : getThreadLocalRequest().getRemoteAddr());
         } catch (Exception e) {
             retVal = false;
         }
@@ -60,6 +63,14 @@ public class MediatorServiceImpl extends RemoteServiceServlet implements Mediato
             throw new LoginException(session);
         }
         botMediator.getList(user, refresh);
+    }
+
+    @Override
+    public List<PackListEvent.Pack> getCurrentList(SessionClient session, String user) throws LoginException {
+        if (!isSessionValid(session)) {
+            throw new LoginException(session);
+        }
+        return PackUtils.getClientPacks(botMediator.getCurrentPackList(user));
     }
 
     public void getPack(final SessionClient session, String user, int pack) throws LoginException {

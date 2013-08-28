@@ -16,6 +16,7 @@ import botleecher.server.security.impl.XmlSessionManager;
 import com.google.inject.AbstractModule;
 import com.google.inject.matcher.Matchers;
 import fr.botleecher.rev.IrcConnection;
+import fr.botleecher.rev.module.ConnectionProvider;
 import fr.botleecher.rev.service.*;
 
 /**

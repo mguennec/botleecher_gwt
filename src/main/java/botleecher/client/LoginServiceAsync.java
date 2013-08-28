@@ -25,4 +25,6 @@ public interface LoginServiceAsync {
     void deleteAccount(final SessionClient session, final String login, AsyncCallback<Void> async);
 
     void getAllAccounts(final SessionClient session, AsyncCallback<List<String>> async);
+
+    void login(final String login, final String password, final String ip, AsyncCallback<String> async);
 }
