@@ -25,7 +25,7 @@ public class MessageEvent implements Event {
             case DOWNLOAD:
                 message = "<span class=\"downloadMessage\">" + this.message + "</span>";
                 break;
-            case ADDED:
+            case INFO:
                 message = "<span class=\"infoMessage\">" + this.message + "</span>";
                 break;
             case ERROR:
@@ -50,6 +50,6 @@ public class MessageEvent implements Event {
     }
 
     public enum MessageType {
-        DOWNLOAD, ADDED, ERROR, REQUEST;
+        DOWNLOAD, INFO, ERROR, REQUEST;
     }
 }

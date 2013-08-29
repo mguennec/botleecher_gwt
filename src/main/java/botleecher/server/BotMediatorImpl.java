@@ -151,7 +151,7 @@ public class BotMediatorImpl extends ListenerAdapter implements fr.botleecher.re
 
     @Override
     public void writeText(final String text) {
-        writeText(text, botleecher.client.event.MessageEvent.MessageType.ADDED);
+        writeText(text, botleecher.client.event.MessageEvent.MessageType.INFO);
     }
 
     /**

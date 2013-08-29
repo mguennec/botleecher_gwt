@@ -7,8 +7,6 @@ import botleecher.client.MediatorServiceAsync;
 import botleecher.client.event.MessageEvent;
 import botleecher.client.event.PackListEvent;
 import botleecher.client.listener.BotLeecherAdapter;
-import com.chj.gwt.client.soundmanager2.Callback;
-import com.chj.gwt.client.soundmanager2.SoundManager;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.HTML;
@@ -37,15 +35,10 @@ public class BotTabPanel extends TabPanel {
 
     private HTML logsHtml = new HTML();
     private MediatorServiceAsync mediatorService = MediatorService.App.getInstance();
-    private SoundManager soundManager = SoundManager.getInstance();
     private Map<String, BotTab> bots = new HashMap<String, BotTab>();
 
     public BotTabPanel() {
         super();
-        soundManager.setUseHtml5Audio(true);
-        soundManager.setFlashVersion(9);
-        soundManager.setNoSWFCache(true);
-        soundManager.setFlashLoadTimeout(1000);
         //SoundManager must be init'd before it can be used.
         DOM.setElementAttribute(logsHtml.getElement(), "id", "gwt-HTML-Logs");
         remoteEventHandle();
@@ -90,16 +83,6 @@ public class BotTabPanel extends TabPanel {
         service.addListener(DomainFactory.getDomain("bot"), new BotLeecherAdapter() {
             public void onMessageEvent(MessageEvent event) {
                 writeLog(event.getMessage());
-                if (MessageEvent.MessageType.ADDED.equals(event.getType())) {
-                    soundManager.beginDelayedInit();
-
-                    soundManager.onReady(new Callback() {
-                        @Override
-                        public void execute() {
-                            soundManager.play("soundId", "sounds/notify.wav");
-                        }
-                    });
-                }
             }
         });
     }
