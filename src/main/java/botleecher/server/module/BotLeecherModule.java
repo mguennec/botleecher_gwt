@@ -5,8 +5,6 @@
 
 package botleecher.server.module;
 
-import botleecher.client.EventMediatorService;
-import botleecher.server.BotMediatorImpl;
 import botleecher.server.EventMediatorServiceImpl;
 import botleecher.server.security.LoginManager;
 import botleecher.server.security.SessionManager;
@@ -33,7 +31,6 @@ public class BotLeecherModule extends AbstractModule {
         bind(NicknameProvider.class).to(SettingsNicknameProvider.class);
         bind(BotLeecherFactory.class).to(BotLeecherFactoryImpl.class);
         bind(PackListReader.class).to(PackListReaderImpl.class);
-        bind(BotMediator.class).to(BotMediatorImpl.class);
         bind(SessionManager.class).to(XmlSessionManager.class);
         bind(LoginManager.class).to(XmlLoginManager.class);
         bind(EventMediatorService.class).to(EventMediatorServiceImpl.class);

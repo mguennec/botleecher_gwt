@@ -18,17 +18,9 @@
 
     <!-- Servlets -->
     <servlet>
-        <servlet-name>botleecher.BotLeecherGwt EventMediatorService</servlet-name>
-        <servlet-class>botleecher.server.EventMediatorServiceImpl</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>eventServiceImpl</servlet-name>
         <servlet-class>de.novanic.eventservice.service.EventServiceImpl</servlet-class>
     </servlet>
-    <servlet-mapping>
-        <servlet-name>botleecher.BotLeecherGwt EventMediatorService</servlet-name>
-        <url-pattern>/botleecher/EventMediatorService</url-pattern>
-    </servlet-mapping>>
     <servlet-mapping>
         <servlet-name>eventServiceImpl</servlet-name>
         <url-pattern>/botleecher/gwteventservice</url-pattern>

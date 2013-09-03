@@ -1,9 +1,13 @@
 package botleecher.server;
 
-import botleecher.client.EventMediatorService;
 import botleecher.client.event.MessageEvent;
 import botleecher.client.event.PackListEvent;
+import botleecher.server.utils.PackUtils;
+import de.novanic.eventservice.client.event.domain.Domain;
+import de.novanic.eventservice.client.event.domain.DomainFactory;
 import de.novanic.eventservice.service.RemoteEventServiceServlet;
+import fr.botleecher.rev.model.Pack;
+import fr.botleecher.rev.service.EventMediatorService;
 
 import java.util.List;
 
@@ -16,15 +20,16 @@ import java.util.List;
  */
 public class EventMediatorServiceImpl extends RemoteEventServiceServlet implements EventMediatorService {
 
+    final Domain DOMAIN = DomainFactory.getDomain("bot");
 
     @Override
-    public void sendMessage(String message, MessageEvent.MessageType type) {
-        addEvent(DOMAIN, new MessageEvent(message, type));
+    public void sendMessage(String message, MessageType type) {
+        addEvent(DOMAIN, new MessageEvent(message, MessageEvent.MessageType.valueOf(type.name())));
     }
 
     @Override
-    public void sendPack(String botName, List<PackListEvent.Pack> packList) {
-        addEvent(DOMAIN, new PackListEvent(botName, packList));
+    public void sendPack(String botName, List<Pack> packList) {
+        addEvent(DOMAIN, new PackListEvent(botName, PackUtils.getClientPacks(packList)));
     }
 
     @Override
