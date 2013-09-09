@@ -37,6 +37,11 @@ public class BotTabPanel extends TabPanel {
     private MediatorServiceAsync mediatorService = MediatorService.App.getInstance();
     private Map<String, BotTab> bots = new HashMap<String, BotTab>();
 
+    // Management of the duplicate logs
+    private String lastLog;
+    private long dateLog;
+    private static final long TIME_LIMIT_LOG = 1000 * 60;
+
     public BotTabPanel() {
         super();
         //SoundManager must be init'd before it can be used.
@@ -66,7 +71,12 @@ public class BotTabPanel extends TabPanel {
     }
 
     private void writeLog(final String log) {
-        logsHtml.setHTML(DateTimeFormat.getFormat("[dd/MM/yyyy HH:mm:ss] ").format(new Date()) + log + "<br />" + logsHtml.getHTML());
+        final Date date = new Date();
+        if (log != null && (!log.equals(lastLog) || dateLog < date.getTime())) {
+            logsHtml.setHTML(DateTimeFormat.getFormat("[dd/MM/yyyy HH:mm:ss] ").format(date) + log + "<br />" + logsHtml.getHTML());
+            lastLog = log;
+            dateLog = date.getTime() + TIME_LIMIT_LOG;
+        }
     }
 
     public void clearBotTabs() {
