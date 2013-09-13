@@ -13,17 +13,17 @@
     <properties>
         <!-- Convenience property to set the GWT version -->
         <gwtVersion>2.5.0</gwtVersion>
-        <gxt.version>3.0.0</gxt.version>
+        <gxt.version>3.0.1</gxt.version>
         <!-- GWT needs at least java 1.5 -->
-        <maven.compiler.source>1.6</maven.compiler.source>
-        <maven.compiler.target>1.6</maven.compiler.target>
+        <maven.compiler.source>1.7</maven.compiler.source>
+        <maven.compiler.target>1.7</maven.compiler.target>
         <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
     </properties>
     <repositories>
         <repository>
             <id>sencha-commercial-release</id>
             <name>Sencha commercial releases</name>
-            <url>https://maven.sencha.com/repo/commercial-release/</url>
+            <url>https://maven.sencha.com/repo/gpl-release/</url>
         </repository>
     </repositories>
 

@@ -57,6 +57,10 @@ span.requestMessage {
   color: red;
 }
 
+.no_select {
+ -webkit-user-select: none;
+}
+
 /** Set ids using widget.getElement().setId("idOfElement") */
 #closeButton {
   margin: 15px 6px 6px;

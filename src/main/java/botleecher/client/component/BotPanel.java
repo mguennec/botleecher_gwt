@@ -48,6 +48,7 @@ public class BotPanel extends Composite {
         };
         persons.setHeight(80);
         persons.setAllowTextSelection(false);
+        //persons.getElement().setClassName("no_select", true);
         remoteEventHandle();
         addClickHandlers();
         final VerticalPanel completePanel = new VerticalPanel();
