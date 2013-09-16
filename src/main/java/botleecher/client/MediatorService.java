@@ -42,29 +42,29 @@ public interface MediatorService extends RemoteService {
 
     Date getEstimatedEnd(final SessionClient session, final String user) throws LoginException;
 
-    String getSavePath(final SessionClient session) throws LoginException;
+    String getSavePath(final SessionClient session) throws Exception;
 
-    void setSavePath(final SessionClient session, final String path) throws LoginException;
+    void setSavePath(final SessionClient session, final String path) throws Exception;
 
-    List<String> getServers(final SessionClient session) throws LoginException;
+    List<String> getServers(final SessionClient session) throws Exception;
 
-    List<String> getChannels(final SessionClient session) throws LoginException;
+    List<String> getChannels(final SessionClient session) throws Exception;
 
-    void addServer(final SessionClient session, final String server) throws LoginException;
+    void addServer(final SessionClient session, final String server) throws Exception;
 
-    void addChannel(final SessionClient session, final String channel) throws LoginException;
+    void addChannel(final SessionClient session, final String channel) throws Exception;
 
     List<String> getAllBots(final SessionClient session) throws LoginException;
 
     List<String> getUsers(final SessionClient session) throws LoginException;
 
-    void setNicks(final SessionClient session, final String nicks) throws LoginException;
+    void setNicks(final SessionClient session, final String nicks) throws Exception;
 
-    String getNicks(final SessionClient session) throws LoginException;
+    String getNicks(final SessionClient session) throws Exception;
 
-    void setKeywords(final SessionClient session, final String keywords) throws LoginException;
+    void setKeywords(final SessionClient session, final String keywords) throws Exception;
 
-    String getKeywords(final SessionClient session) throws LoginException;
+    String getKeywords(final SessionClient session) throws Exception;
 
     void removeLeecher(final SessionClient session, final String user) throws LoginException;
 

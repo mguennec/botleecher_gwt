@@ -36,7 +36,7 @@ public class BotPanel extends Composite {
 
     private MediatorServiceAsync mediatorService = MediatorService.App.getInstance();
 
-    public BotPanel() {
+    public BotPanel() throws Exception {
         persons = new ListView<String, String>(personsStore, new ToStringValueProvider<String>()) {
             @Override
             public void onBrowserEvent(Event event) {
@@ -106,7 +106,7 @@ public class BotPanel extends Composite {
         });
     }
 
-    private void initData() {
+    private void initData() throws Exception {
         mediatorService.getServers(BotLeecherGwt.getSession(), new AsyncCallbackAdapter<List<String>>("Mediator.getServers") {
             @Override
             public void onSuccess(List<String> result) {

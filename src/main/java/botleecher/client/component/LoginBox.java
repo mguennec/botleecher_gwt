@@ -63,7 +63,11 @@ public class LoginBox extends DialogBox {
                                 Date expires = new Date(System.currentTimeMillis() + SessionManager.SESSION_DURATION);
                                 Cookies.setCookie(BotLeecherGwt.SID_COOKIE_NAME, result, expires, null, "/", false);
                                 Cookies.setCookie(BotLeecherGwt.USER_COOKIE_NAME, login, expires, null, "/", false);
-                                BotLeecherGwt.showPanel();
+                                try {
+                                    BotLeecherGwt.showPanel();
+                                } catch (Exception e) {
+                                    onFailure(e);
+                                }
                             }
                         }
                     });

@@ -16,6 +16,7 @@ import com.google.inject.matcher.Matchers;
 import fr.botleecher.rev.IrcConnection;
 import fr.botleecher.rev.module.ConnectionProvider;
 import fr.botleecher.rev.service.*;
+import fr.botleecher.rev.service.mongo.MongoSettingsImpl;
 
 /**
  * Guice configuration module
@@ -27,7 +28,8 @@ public class BotLeecherModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        bind(Settings.class).to(SettingsImpl.class);
+        //bind(Settings.class).to(SettingsImpl.class);
+        bind(Settings.class).to(MongoSettingsImpl.class);
         bind(NicknameProvider.class).to(SettingsNicknameProvider.class);
         bind(BotLeecherFactory.class).to(BotLeecherFactoryImpl.class);
         bind(PackListReader.class).to(PackListReaderImpl.class);

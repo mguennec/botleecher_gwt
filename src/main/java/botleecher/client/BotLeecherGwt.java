@@ -56,7 +56,7 @@ public class BotLeecherGwt implements EntryPoint {
 
     }
 
-    public static void showPanel() {
+    public static void showPanel() throws Exception {
         if (botPanel == null) {
             createApplication();
         }
@@ -82,7 +82,11 @@ public class BotLeecherGwt implements EntryPoint {
             @Override
             public void onSuccess(Boolean result) {
                 if (result) {
-                    showPanel();
+                    try {
+                        showPanel();
+                    } catch (Exception e) {
+                        onFailure(e);
+                    }
                 } else {
                     showLoginBox();
                 }
@@ -108,7 +112,7 @@ public class BotLeecherGwt implements EntryPoint {
         dialogBox.hide();
     }
 
-    private static void createApplication() {
+    private static void createApplication() throws Exception {
         if (botPanel == null) {
             botPanel = new BotPanel();
             RootPanel.get().add(botPanel);

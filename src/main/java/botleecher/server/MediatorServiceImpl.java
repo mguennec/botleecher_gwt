@@ -14,6 +14,7 @@ import fr.botleecher.rev.service.BotMediator;
 import org.pircbotx.User;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -116,7 +117,7 @@ public class MediatorServiceImpl extends RemoteServiceServlet implements Mediato
     }
 
     @Override
-    public String getSavePath(final SessionClient session) throws LoginException {
+    public String getSavePath(final SessionClient session) throws Exception {
         if (!isSessionValid(session)) {
             throw new LoginException(session);
         }
@@ -124,7 +125,7 @@ public class MediatorServiceImpl extends RemoteServiceServlet implements Mediato
     }
 
     @Override
-    public void setSavePath(final SessionClient session, String path) throws LoginException {
+    public void setSavePath(final SessionClient session, String path) throws Exception {
         if (!isSessionValid(session)) {
             throw new LoginException(session);
         }
@@ -132,7 +133,7 @@ public class MediatorServiceImpl extends RemoteServiceServlet implements Mediato
     }
 
     @Override
-    public List<String> getServers(final SessionClient session) throws LoginException {
+    public List<String> getServers(final SessionClient session) throws Exception {
         if (!isSessionValid(session)) {
             throw new LoginException(session);
         }
@@ -140,7 +141,7 @@ public class MediatorServiceImpl extends RemoteServiceServlet implements Mediato
     }
 
     @Override
-    public List<String> getChannels(final SessionClient session) throws LoginException {
+    public List<String> getChannels(final SessionClient session) throws Exception {
         if (!isSessionValid(session)) {
             throw new LoginException(session);
         }
@@ -148,7 +149,7 @@ public class MediatorServiceImpl extends RemoteServiceServlet implements Mediato
     }
 
     @Override
-    public void addServer(final SessionClient session, String server) throws LoginException {
+    public void addServer(final SessionClient session, String server) throws Exception {
         if (!isSessionValid(session)) {
             throw new LoginException(session);
         }
@@ -156,7 +157,7 @@ public class MediatorServiceImpl extends RemoteServiceServlet implements Mediato
     }
 
     @Override
-    public void addChannel(final SessionClient session, String channel) throws LoginException {
+    public void addChannel(final SessionClient session, String channel) throws Exception {
         if (!isSessionValid(session)) {
             throw new LoginException(session);
         }
@@ -180,7 +181,7 @@ public class MediatorServiceImpl extends RemoteServiceServlet implements Mediato
         if (!isSessionValid(session)) {
             throw new LoginException(session);
         }
-        final List<String> users = new ArrayList<String>();
+        final List<String> users = new ArrayList<>();
         for (User user : botMediator.getUsers()) {
             users.add(user.getNick());
         }
@@ -188,15 +189,15 @@ public class MediatorServiceImpl extends RemoteServiceServlet implements Mediato
     }
 
     @Override
-    public void setNicks(final SessionClient session, String nicks) throws LoginException {
+    public void setNicks(final SessionClient session, String nicks) throws Exception {
         if (!isSessionValid(session)) {
             throw new LoginException(session);
         }
-        botMediator.setNicks(nicks);
+        botMediator.setNicks(Arrays.asList(nicks.split(",")));
     }
 
     @Override
-    public String getNicks(final SessionClient session) throws LoginException {
+    public String getNicks(final SessionClient session) throws Exception {
         if (!isSessionValid(session)) {
             throw new LoginException(session);
         }
@@ -211,15 +212,15 @@ public class MediatorServiceImpl extends RemoteServiceServlet implements Mediato
     }
 
     @Override
-    public void setKeywords(final SessionClient session, String keywords) throws LoginException {
+    public void setKeywords(final SessionClient session, String keywords) throws Exception {
         if (!isSessionValid(session)) {
             throw new LoginException(session);
         }
-        botMediator.setKeywords(keywords);
+        botMediator.setKeywords(Arrays.asList(keywords.split(",")));
     }
 
     @Override
-    public String getKeywords(final SessionClient session) throws LoginException {
+    public String getKeywords(final SessionClient session) throws Exception {
         if (!isSessionValid(session)) {
             throw new LoginException(session);
         }
