@@ -1,5 +1,6 @@
 package botleecher.client.listener;
 
+import botleecher.client.event.DownloadStatusEvent;
 import botleecher.client.event.MessageEvent;
 import botleecher.client.event.PackListEvent;
 import botleecher.client.event.UserListEvent;
@@ -13,13 +14,20 @@ import de.novanic.eventservice.client.event.Event;
  * To change this template use File | Settings | File Templates.
  */
 public class BotLeecherAdapter implements BotLeecherListener {
+    @Override
     public void onMessageEvent(MessageEvent event) {
     }
 
+    @Override
     public void onPackListEvent(PackListEvent event) {
     }
 
+    @Override
     public void onUserListEvent(UserListEvent event) {
+    }
+
+    @Override
+    public void onDownloadStatusEvent(DownloadStatusEvent event) {
     }
 
     public void apply(Event event) {
@@ -29,6 +37,8 @@ public class BotLeecherAdapter implements BotLeecherListener {
             onPackListEvent((PackListEvent) event);
         } else if (event instanceof UserListEvent) {
             onUserListEvent((UserListEvent) event);
+        } else if (event instanceof DownloadStatusEvent) {
+            onDownloadStatusEvent((DownloadStatusEvent) event);
         }
     }
 }

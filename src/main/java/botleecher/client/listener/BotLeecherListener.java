@@ -1,5 +1,6 @@
 package botleecher.client.listener;
 
+import botleecher.client.event.DownloadStatusEvent;
 import botleecher.client.event.MessageEvent;
 import botleecher.client.event.PackListEvent;
 import botleecher.client.event.UserListEvent;
@@ -16,5 +17,6 @@ public interface BotLeecherListener extends RemoteEventListener {
     void onMessageEvent(MessageEvent event);
     void onPackListEvent(PackListEvent event);
     void onUserListEvent(UserListEvent event);
+    void onDownloadStatusEvent(DownloadStatusEvent event);
 
 }

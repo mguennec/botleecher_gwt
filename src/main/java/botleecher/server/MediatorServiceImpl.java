@@ -106,7 +106,7 @@ public class MediatorServiceImpl extends RemoteServiceServlet implements Mediato
         if (!isSessionValid(session)) {
             throw new LoginException(session);
         }
-        return botMediator.getTransfertRate(user);
+        return botMediator.getTransferRate(user);
     }
 
     public Date getEstimatedEnd(final SessionClient session, String user) throws LoginException {

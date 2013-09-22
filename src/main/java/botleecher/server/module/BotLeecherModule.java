@@ -14,9 +14,13 @@ import botleecher.server.security.impl.XmlSessionManager;
 import com.google.inject.AbstractModule;
 import com.google.inject.matcher.Matchers;
 import fr.botleecher.rev.IrcConnection;
+import fr.botleecher.rev.enums.SettingProperty;
+import fr.botleecher.rev.enums.StorageType;
 import fr.botleecher.rev.module.ConnectionProvider;
 import fr.botleecher.rev.service.*;
 import fr.botleecher.rev.service.mongo.MongoSettingsImpl;
+import fr.botleecher.rev.service.properties.SettingsImpl;
+import fr.botleecher.rev.tools.PropertiesLoader;
 
 /**
  * Guice configuration module
@@ -25,11 +29,11 @@ import fr.botleecher.rev.service.mongo.MongoSettingsImpl;
  */
 public class BotLeecherModule extends AbstractModule {
 
+    private PropertiesLoader propertiesLoader = PropertiesLoader.getInstance();
 
     @Override
     protected void configure() {
-        //bind(Settings.class).to(SettingsImpl.class);
-        bind(Settings.class).to(MongoSettingsImpl.class);
+        loadStorage();
         bind(NicknameProvider.class).to(SettingsNicknameProvider.class);
         bind(BotLeecherFactory.class).to(BotLeecherFactoryImpl.class);
         bind(PackListReader.class).to(PackListReaderImpl.class);
@@ -43,6 +47,18 @@ public class BotLeecherModule extends AbstractModule {
         bindInterceptor(Matchers.any(), Matchers.annotatedWith(DefaultLogin.class), interceptor);
     }
 
+    private void loadStorage() {
+        final StorageType type = StorageType.getByType(propertiesLoader.getProperty(SettingProperty.PROP_STORAGETYPE.getPropertyName(), SettingProperty.PROP_STORAGETYPE.getDefaultValue().get(0)));
+        switch (type) {
+            case EMBEDDED_MONGO:
+                bind(Settings.class).to(MongoSettingsImpl.class);
+                break;
+            default:
+                // File
+                bind(Settings.class).to(SettingsImpl.class);
+                break;
+        }
+    }
 
 
 }

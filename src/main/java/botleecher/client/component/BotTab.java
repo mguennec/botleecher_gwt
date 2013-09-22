@@ -4,6 +4,7 @@ import botleecher.client.AsyncCallbackAdapter;
 import botleecher.client.BotLeecherGwt;
 import botleecher.client.MediatorService;
 import botleecher.client.MediatorServiceAsync;
+import botleecher.client.event.DownloadStatusEvent;
 import botleecher.client.event.PackListEvent;
 import botleecher.client.listener.BotLeecherAdapter;
 import botleecher.shared.EnterValidateKeyUpHandler;
@@ -19,7 +20,6 @@ import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
-import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.view.client.SingleSelectionModel;
 import com.sencha.gxt.widget.core.client.button.TextButton;
@@ -115,7 +115,7 @@ public class BotTab extends Composite implements IFilter<PackListEvent.Pack> {
         table.addColumn(dlColumn, "Dls");
 
         table.setPageSize(100);
-        final Timer t = new
+        /*final Timer t = new
                 Timer() {
                     public void run() {
                         mediatorService.getFileName(BotLeecherGwt.getSession(), botName, new AsyncCallbackAdapter<String>("Mediator.getFileName") {
@@ -133,7 +133,7 @@ public class BotTab extends Composite implements IFilter<PackListEvent.Pack> {
                     }
                 };
 
-        t.scheduleRepeating(20000);
+        t.scheduleRepeating(20000);*/
 
         final RemoteEventServiceFactory factory = RemoteEventServiceFactory.getInstance();
         final RemoteEventService service = factory.getRemoteEventService();
@@ -141,6 +141,14 @@ public class BotTab extends Composite implements IFilter<PackListEvent.Pack> {
             public void onPackListEvent(PackListEvent event) {
                 if (event.getNick().equalsIgnoreCase(botName)) {
                     setPackList(event.getPacks());
+                }
+            }
+
+            @Override
+            public void onDownloadStatusEvent(DownloadStatusEvent event) {
+                if (event.getNick().equalsIgnoreCase(botName)) {
+                    progressBar.updateProgress((double) event.getCompletion() / 100.0, event.getFileName() + " ({0} %)");
+
                 }
             }
         });

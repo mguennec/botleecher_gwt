@@ -4,6 +4,7 @@ import botleecher.client.AsyncCallbackAdapter;
 import botleecher.client.BotLeecherGwt;
 import botleecher.client.MediatorService;
 import botleecher.client.MediatorServiceAsync;
+import botleecher.client.event.DownloadStatusEvent;
 import botleecher.client.event.MessageEvent;
 import botleecher.client.event.PackListEvent;
 import botleecher.client.listener.BotLeecherAdapter;

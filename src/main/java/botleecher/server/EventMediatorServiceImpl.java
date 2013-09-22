@@ -1,5 +1,6 @@
 package botleecher.server;
 
+import botleecher.client.event.DownloadStatusEvent;
 import botleecher.client.event.MessageEvent;
 import botleecher.client.event.PackListEvent;
 import botleecher.server.utils.PackUtils;
@@ -35,5 +36,10 @@ public class EventMediatorServiceImpl extends RemoteEventServiceServlet implemen
     @Override
     public void sendUserList(List<String> users) {
         addEvent(DOMAIN, new botleecher.client.event.UserListEvent(users));
+    }
+
+    @Override
+    public void sendTransferStatus(String botName, String fileName, int completion) {
+        addEvent(DOMAIN, new DownloadStatusEvent(botName, fileName, completion));
     }
 }
